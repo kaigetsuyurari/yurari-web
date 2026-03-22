@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { getBroadcasts, getNewsItems } from "@/lib/sheets"
@@ -6,6 +7,15 @@ import { ChevronLeft } from "lucide-react"
 
 type Props = {
   params: Promise<{ episode: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { episode: encoded } = await params
+  const episodeIndex = decodeURIComponent(encoded)
+  return {
+    title: `第${episodeIndex}回`,
+    description: `海月ゆらりのニュース番組 第${episodeIndex}回の見出し一覧`,
+  }
 }
 
 export default async function NewsHeadlinePage({ params }: Props) {

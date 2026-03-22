@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { getNewsDetail, getNewsItems } from "@/lib/sheets"
@@ -6,6 +7,17 @@ import { ChevronLeft } from "lucide-react"
 
 type Props = {
   params: Promise<{ episode: string; headline: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { episode: encoded, headline } = await params
+  const episodeIndex = decodeURIComponent(encoded)
+  const items = await getNewsItems(episodeIndex)
+  const headlineText = items.find(i => i.headline_index === headline)?.headline_text ?? ""
+  return {
+    title: headlineText || `第${episodeIndex}回`,
+    description: `海月ゆらりのニュース番組 第${episodeIndex}回「${headlineText}」`,
+  }
 }
 
 export default async function NewsDetailPage({ params }: Props) {

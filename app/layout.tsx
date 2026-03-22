@@ -16,11 +16,30 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://yurari-web.vercel.app"
+
 export const metadata: Metadata = {
-  title: "ゆらりWEB",
-  description: "海月ゆらりのYouTubeニュース番組のアーカイブサイト",
-  icons: {
-    icon: "/favicon.ico",
+  title: {
+    default: "ゆらりWEB",
+    template: "%s | ゆらりWEB",
+  },
+  description: "海月ゆらり 公式サイト",
+  metadataBase: new URL(SITE_URL),
+  openGraph: {
+    title: "ゆらりWEB",
+    description: "海月ゆらり 公式サイト",
+    url: SITE_URL,
+    siteName: "ゆらりWEB",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
+    locale: "ja_JP",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ゆらりWEB",
+    description: "海月ゆらり 公式サイト",
+    creator: "@kaigetsuyurari",
+    images: ["/og-image.jpg"],
   },
 }
 

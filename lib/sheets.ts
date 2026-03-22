@@ -83,10 +83,16 @@ async function fetchSheet(sheet: string): Promise<string[][]> {
   return rows.slice(1).filter(r => r.some(f => f.trim() !== ""))
 }
 
+function formatDate(raw: string): string {
+  const d = new Date(raw)
+  if (isNaN(d.getTime())) return raw
+  return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`
+}
+
 export async function getBroadcasts(): Promise<Broadcast[]> {
   const rows = await fetchSheet("broadcasts")
   return rows.map(r => ({
-    date: r[0]?.trim() ?? "",
+    date: formatDate(r[0]?.trim() ?? ""),
     episode_index: r[1]?.trim() ?? "",
   }))
 }

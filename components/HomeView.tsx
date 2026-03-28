@@ -33,6 +33,9 @@ export default function HomeView() {
           X
         </a>
       </div>
+      <p className="mt-8 text-xs text-muted-foreground">
+        モデル原案：胃袋
+      </p>
     </div>
   )
 }

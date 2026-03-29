@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
+export const dynamic = "force-dynamic"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { getBroadcasts, getNewsItems } from "@/lib/sheets"
+import { getBroadcasts, getNewsItems } from "@/lib/db"
 import NewsHeadlineItem from "@/components/NewsHeadlineItem"
 import { ChevronLeft } from "lucide-react"
 

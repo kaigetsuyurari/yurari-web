@@ -36,6 +36,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# cloudflare
+.open-next
+.deploy
+.wrangler
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
@@ -45,3 +50,4 @@ next-env.d.ts
 
 # Claude Code local settings
 .claude/settings.local.json
+scripts/data/

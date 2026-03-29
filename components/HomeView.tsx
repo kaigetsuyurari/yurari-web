@@ -6,21 +6,24 @@ const X_URL = "https://x.com/kaigetsuyurari"
 export default function HomeView() {
   return (
     <div className="flex flex-col items-center">
-      <Image
-        src="/kaigetsuyurari.jpg"
-        alt="海月ゆらり"
-        width={400}
-        height={600}
-        className="max-w-full object-contain"
-        unoptimized
-        priority
-      />
-      <div className="mt-6 flex flex-col gap-3">
+      <div className="relative">
+        <div className="absolute -inset-1 rounded-lg bg-neon/10 blur-xl" />
+        <Image
+          src="/kaigetsuyurari.jpg"
+          alt="Μέδουσα Ἰελλάρι"
+          width={400}
+          height={600}
+          className="relative max-w-full rounded-sm object-contain"
+          unoptimized
+          priority
+        />
+      </div>
+      <div className="mt-8 flex flex-col gap-3">
         <a
           href={YOUTUBE_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center rounded-full bg-card px-8 py-3 text-sm font-medium text-foreground shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-colors hover:bg-muted"
+          className="inline-flex items-center justify-center border border-glow bg-card px-10 py-3 text-sm font-medium tracking-widest text-foreground transition-all duration-300 hover:border-neon hover:text-neon hover:glow-sm"
         >
           YouTube
         </a>
@@ -28,13 +31,13 @@ export default function HomeView() {
           href={X_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center rounded-full bg-card px-8 py-3 text-sm font-medium text-foreground shadow-[0_2px_8px_rgba(0,0,0,0.12)] transition-colors hover:bg-muted"
+          className="inline-flex items-center justify-center border border-glow bg-card px-10 py-3 text-sm font-medium tracking-widest text-foreground transition-all duration-300 hover:border-neon hover:text-neon hover:glow-sm"
         >
           X
         </a>
       </div>
       <p className="mt-8 text-xs text-muted-foreground">
-        モデル原案：胃袋
+        Ἀρχέτυπον: 胃袋
       </p>
     </div>
   )

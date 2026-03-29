@@ -11,10 +11,10 @@ export default function NewsHeadlineItem({ item }: Props) {
   return (
     <Link
       href={href}
-      className="block rounded-lg border border-border bg-card px-5 py-3 transition-colors hover:bg-muted"
+      className="group block border border-border bg-card px-5 py-3 transition-all duration-300 border-glow-hover"
     >
       <div className="flex items-center gap-3">
-        <span className="min-w-[2rem] text-sm font-mono text-muted-foreground">
+        <span className="min-w-[2rem] font-mono text-sm text-neon-dim transition-colors group-hover:text-neon group-hover:glow-text">
           {item.headline_index}.
         </span>
         <span className="text-sm text-foreground">{item.headline_text}</span>

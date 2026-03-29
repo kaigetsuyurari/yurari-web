@@ -12,11 +12,13 @@ export default function BroadcastCard({ broadcast }: Props) {
   return (
     <Link
       href={href}
-      className="block rounded-lg border border-border bg-card px-5 py-4 transition-colors hover:bg-muted"
+      className="group block border border-border bg-card px-5 py-4 transition-all duration-300 border-glow-hover"
     >
       <div className="flex items-baseline gap-3">
-        <span className="text-base font-semibold text-foreground">第{episode_index}回</span>
-        <span className="text-sm text-muted-foreground">{date}</span>
+        <span className="font-mono text-sm text-neon-dim transition-colors group-hover:text-neon group-hover:glow-text">
+          #{episode_index}
+        </span>
+        <span className="ml-auto font-mono text-xs text-muted-foreground">{date}</span>
       </div>
     </Link>
   )

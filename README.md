@@ -2,25 +2,34 @@
 
 海月ゆらりの公式サイトです。
 
-## 機能
+## Δυνάμεις
 
-- **ホーム** — プロフィール画像、YouTube / X へのリンク
-- **ニュース一覧・詳細** — Google Sheets から放送データを取得して表示
-- **台本表示** — 各ニュースの台本を閲覧可能
+- **Οἶκος** — εἰκὼν προσώπου, σύνδεσμοι πρὸς YouTube / X
+- **Ἀρχεῖον τῶν Ἐκπομπῶν** — δεδομένα ἐκπομπῶν ἐκ Cloudflare D1
+- **Γραφαὶ Ἀγγελιῶν** — ἀνάγνωσις τῶν γραφῶν ἑκάστης ἀγγελίας
+- **Διαχείρισις** — ἀνάρτησις CSV πρὸς ἐνημέρωσιν τῆς βάσεως δεδομένων
 
-## 技術スタック
+## Τεχνικὴ Ἀρχιτεκτονία
 
 - [Next.js](https://nextjs.org/) 16 (App Router)
 - [Tailwind CSS](https://tailwindcss.com/) v4
 - [shadcn/ui](https://ui.shadcn.com/) v4
 - TypeScript
-- Google Sheets API（データソース）
+- Cloudflare Pages + D1
+- Cloudflare Access (Zero Trust)
 
-## 開発
+## Ἀνάπτυξις
 
 ```bash
 npm install
 npm run dev
 ```
 
-http://localhost:3000 で開発サーバーが起動します。
+http://localhost:3000 — ὁ ἐξυπηρετητὴς ἀναπτύξεως.
+
+## Ἐκτέλεσις
+
+```bash
+npm run build:worker
+npm run deploy
+```

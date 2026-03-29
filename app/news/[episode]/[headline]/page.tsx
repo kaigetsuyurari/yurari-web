@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const items = await getNewsItems(episodeIndex)
   const headlineText = items.find(i => i.headline_index === headline)?.headline_text ?? ""
   return {
-    title: headlineText || `第${episodeIndex}回`,
-    description: `海月ゆらりのニュース番組 第${episodeIndex}回「${headlineText}」`,
+    title: headlineText || `#${episodeIndex}`,
+    description: `Μέδουσα Ἰελλάρι — #${episodeIndex} «${headlineText}»`,
   }
 }
 
@@ -41,27 +41,27 @@ export default async function NewsDetailPage({ params }: Props) {
     <div>
       <Link
         href={`/news/${encodeURIComponent(episodeIndex)}`}
-        className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+        className="mb-6 inline-flex items-center gap-1 font-mono text-xs tracking-wide text-muted-foreground transition-colors hover:text-neon"
       >
         <ChevronLeft className="size-4" />
-        見出し一覧へ戻る
+        Ἐπάνοδος εἰς τὰ κεφάλαια
       </Link>
 
       <article>
         <header className="mb-6">
-          <h1 className="text-xl font-bold leading-snug">{headlineText}</h1>
+          <h1 className="text-xl font-medium leading-snug tracking-wide">{headlineText}</h1>
         </header>
 
         <ScriptView script={detail.script} />
       </article>
 
       {(prev || next) && (
-        <nav className="mt-10 flex justify-between gap-4 border-t border-border pt-6 text-sm">
+        <nav className="mt-10 flex justify-between gap-4 border-t border-neon/10 pt-6 text-sm">
           <div className="flex-1">
             {prev && (
               <Link
                 href={`/news/${encodeURIComponent(episodeIndex)}/${prev.headline_index}`}
-                className="text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground transition-colors hover:text-neon"
               >
                 ← {prev.headline_text}
               </Link>
@@ -71,7 +71,7 @@ export default async function NewsDetailPage({ params }: Props) {
             {next && (
               <Link
                 href={`/news/${encodeURIComponent(episodeIndex)}/${next.headline_index}`}
-                className="text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground transition-colors hover:text-neon"
               >
                 {next.headline_text} →
               </Link>

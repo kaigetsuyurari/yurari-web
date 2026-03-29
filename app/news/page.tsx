@@ -4,8 +4,8 @@ import { getBroadcasts } from "@/lib/db"
 import BroadcastList from "@/components/BroadcastList"
 
 export const metadata: Metadata = {
-  title: "ニュースの記録",
-  description: "海月ゆらりのニュース番組 放送アーカイブ一覧",
+  title: "Ἀρχεῖον τῶν Ἐκπομπῶν",
+  description: "Μέδουσα Ἰελλάρι — τὸ ἀρχεῖον τῶν ἐκπομπῶν",
 }
 
 export default async function NewsPage() {
@@ -13,7 +13,7 @@ export default async function NewsPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-medium">ニュースの記録</h1>
+      <h1 className="mb-6 text-2xl font-medium tracking-widest text-neon glow-text">Ἀρχεῖον τῶν Ἐκπομπῶν</h1>
       <BroadcastList broadcasts={broadcasts} />
     </div>
   )

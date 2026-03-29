@@ -14,8 +14,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { episode: encoded } = await params
   const episodeIndex = decodeURIComponent(encoded)
   return {
-    title: `第${episodeIndex}回`,
-    description: `海月ゆらりのニュース番組 第${episodeIndex}回の見出し一覧`,
+    title: `#${episodeIndex}`,
+    description: `Μέδουσα Ἰελλάρι — #${episodeIndex} κεφάλαια`,
   }
 }
 
@@ -35,19 +35,19 @@ export default async function NewsHeadlinePage({ params }: Props) {
     <div>
       <Link
         href="/news"
-        className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+        className="mb-6 inline-flex items-center gap-1 font-mono text-xs tracking-wide text-muted-foreground transition-colors hover:text-neon"
       >
         <ChevronLeft className="size-4" />
-        ニュースの記録へ戻る
+        Ἐπάνοδος εἰς τὰς Ἐκπομπάς
       </Link>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">第{broadcast.episode_index}回</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{broadcast.date}</p>
+        <h1 className="font-mono text-2xl font-medium tracking-widest text-neon glow-text">#{broadcast.episode_index}</h1>
+        <p className="mt-1 font-mono text-sm text-muted-foreground">{broadcast.date}</p>
       </div>
 
       {items.length === 0 ? (
-        <p className="text-muted-foreground">ニュース記事がありません。</p>
+        <p className="text-muted-foreground">Οὐδεμία ἀγγελία εὑρέθη.</p>
       ) : (
         <ul className="flex flex-col gap-2">
           {items.map(item => (

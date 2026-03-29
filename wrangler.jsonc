@@ -1,0 +1,13 @@
+{
+  "name": "yurari-web",
+  "compatibility_date": "2025-04-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "pages_build_output_dir": ".open-next",
+  "d1_databases": [
+    {
+      "binding": "yurari_db",
+      "database_name": "yurari-db",
+      "database_id": "48ab01f1-1860-4dc1-aa67-818946f7fe70"
+    }
+  ]
+}

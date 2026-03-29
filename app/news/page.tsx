@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import { getBroadcasts } from "@/lib/sheets"
+export const dynamic = "force-dynamic"
+import { getBroadcasts } from "@/lib/db"
 import BroadcastList from "@/components/BroadcastList"
 
 export const metadata: Metadata = {

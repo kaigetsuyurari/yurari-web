@@ -7,7 +7,7 @@ type Props = {
 
 export default function BroadcastList({ broadcasts }: Props) {
   if (broadcasts.length === 0) {
-    return <p className="text-muted-foreground">まだ配信はありません。</p>
+    return <p className="text-muted-foreground">Οὐδεμία ἐκπομπὴ εὑρέθη.</p>
   }
 
   return (

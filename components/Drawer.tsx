@@ -9,8 +9,8 @@ type Props = {
 }
 
 const menuItems = [
-  { label: "ホーム", href: "/" },
-  { label: "ニュースの記録", href: "/news" },
+  { label: "Οἶκος", href: "/" },
+  { label: "Ἀρχεῖον", href: "/news" },
 ]
 
 export default function Drawer({ open, onClose }: Props) {
@@ -20,7 +20,7 @@ export default function Drawer({ open, onClose }: Props) {
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
+        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={onClose}
@@ -28,7 +28,7 @@ export default function Drawer({ open, onClose }: Props) {
 
       {/* Drawer panel */}
       <nav
-        className={`fixed left-0 top-0 z-50 h-full w-64 bg-card shadow-lg transition-transform duration-300 ${
+        className={`fixed left-0 top-0 z-50 h-full w-64 border-r border-neon/20 bg-card shadow-[4px_0_24px_rgba(0,200,255,0.1)] transition-transform duration-300 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -45,10 +45,10 @@ export default function Drawer({ open, onClose }: Props) {
                   <Link
                     href={item.href}
                     onClick={onClose}
-                    className={`block rounded-md px-4 py-3 text-sm transition-colors ${
+                    className={`block border-l-2 px-4 py-3 text-sm tracking-wide transition-all duration-200 ${
                       isActive
-                        ? "bg-primary/20 font-medium text-foreground"
-                        : "text-foreground/70 hover:bg-primary/10 hover:text-foreground"
+                        ? "border-neon bg-neon/10 font-medium text-neon"
+                        : "border-transparent text-foreground/60 hover:border-neon/40 hover:bg-neon/5 hover:text-foreground"
                     }`}
                   >
                     {item.label}

@@ -10,8 +10,8 @@ export default function Fab({ onClick }: Props) {
   return (
     <button
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-50 flex size-14 items-center justify-center rounded-full bg-card shadow-[0_2px_8px_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.1)] transition-transform hover:scale-105 active:scale-95"
-      aria-label="メニューを開く"
+      className="fixed bottom-6 right-6 z-50 flex size-14 items-center justify-center rounded-full border border-neon/30 bg-card transition-all duration-300 hover:border-neon/60 hover:glow-md active:scale-95"
+      aria-label="Κατάλογος"
     >
       <Image
         src="/icon.svg"

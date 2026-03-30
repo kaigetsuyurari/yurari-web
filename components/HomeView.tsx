@@ -1,6 +1,7 @@
 import Image from "next/image"
 
 const YOUTUBE_URL = process.env.NEXT_PUBLIC_YOUTUBE_URL ?? "https://www.youtube.com/@KaigetsuYurari"
+const GITHUB_URL = "https://github.com/kaigetsuyurari"
 const X_URL = "https://x.com/kaigetsuyurari"
 
 export default function HomeView() {
@@ -19,6 +20,14 @@ export default function HomeView() {
         />
       </div>
       <div className="mt-8 flex flex-col gap-3">
+        <a
+          href={GITHUB_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center border border-glow bg-card px-10 py-3 text-sm font-medium tracking-widest text-foreground transition-all duration-300 hover:border-neon hover:text-neon hover:glow-sm"
+        >
+          GitHub
+        </a>
         <a
           href={YOUTUBE_URL}
           target="_blank"

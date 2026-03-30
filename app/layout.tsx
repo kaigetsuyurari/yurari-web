@@ -8,7 +8,7 @@ const zenKaku = Zen_Kaku_Gothic_New({
   subsets: ["latin"],
   variable: "--font-zen",
   display: "swap",
-  preload: true,
+  preload: false,
 })
 
 const geistMono = Geist_Mono({
@@ -26,12 +26,7 @@ export const metadata: Metadata = {
   description: "海月ゆらり 公式サイト",
   metadataBase: new URL(SITE_URL),
   icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "16x16 32x32" },
-      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
-      { url: "/icon.png", sizes: "256x256", type: "image/png" },
-      { url: "/icon.svg", type: "image/svg+xml" },
-    ],
+    icon: { url: "/favicon.ico", sizes: "32x32" },
     apple: { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
   },
   openGraph: {

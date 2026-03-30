@@ -25,6 +25,14 @@ export const metadata: Metadata = {
   },
   description: "海月ゆらり 公式サイト",
   metadataBase: new URL(SITE_URL),
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "16x16 32x32" },
+      { url: "/icon.png", sizes: "256x256", type: "image/png" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+  },
   openGraph: {
     title: "海月ゆらり公式サイト",
     description: "海月ゆらり 公式サイト",

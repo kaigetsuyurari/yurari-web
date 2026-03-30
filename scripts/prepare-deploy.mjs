@@ -26,11 +26,8 @@ for (const dir of ["cloudflare", "middleware", "server-functions", ".build", "ca
   cpSync(`${OPEN_NEXT}/${dir}`, `${DEPLOY_DIR}/${dir}`, { recursive: true, force: true })
 }
 
-// Copy app-level icons (Next.js metadata convention files)
-cpSync("app/icon.png", `${DEPLOY_DIR}/icon.png`)
-cpSync("app/apple-icon.png", `${DEPLOY_DIR}/apple-icon.png`)
-
 // Generate _routes.json
+// Icons are served from public/ as static files (copied via .open-next/assets)
 // "exclude" patterns are served as static files (not routed to the worker)
 const routes = {
   version: 1,

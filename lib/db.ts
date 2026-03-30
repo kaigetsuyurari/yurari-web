@@ -158,18 +158,22 @@ export async function createBroadcast(data: BroadcastDetail): Promise<void> {
   await db.batch(stmts)
 }
 
-export async function updateBroadcast(episodeIndex: string, data: { date: string; news_items: BroadcastDetail["news_items"] }): Promise<void> {
+export async function updateBroadcast(episodeIndex: string, data: { date: string; news_items: BroadcastDetail["news_items"]; newEpisodeIndex?: string }): Promise<void> {
   const db = await getDB()
+  const targetEpisode = data.newEpisodeIndex ?? episodeIndex
   const stmts = [
-    db.prepare("UPDATE broadcasts SET date = ? WHERE episode_index = ?")
-      .bind(data.date, Number(episodeIndex)),
+    ...(data.newEpisodeIndex
+      ? [db.prepare("UPDATE broadcasts SET episode_index = ?, date = ? WHERE episode_index = ?")
+          .bind(Number(data.newEpisodeIndex), data.date, Number(episodeIndex))]
+      : [db.prepare("UPDATE broadcasts SET date = ? WHERE episode_index = ?")
+          .bind(data.date, Number(episodeIndex))]),
     db.prepare("DELETE FROM news_items WHERE broadcast_id = (SELECT id FROM broadcasts WHERE episode_index = ?)")
-      .bind(Number(episodeIndex)),
+      .bind(Number(targetEpisode)),
     ...data.news_items.map(item =>
       db.prepare(
         `INSERT INTO news_items (broadcast_id, headline_index, headline_text, script)
          VALUES ((SELECT id FROM broadcasts WHERE episode_index = ?), ?, ?, ?)`
-      ).bind(Number(episodeIndex), Number(item.headline_index), item.headline_text, item.script)
+      ).bind(Number(targetEpisode), Number(item.headline_index), item.headline_text, item.script)
     ),
   ]
   await db.batch(stmts)

@@ -7,13 +7,14 @@ type Params = { params: Promise<{ episode: string }> }
 export async function PUT(request: NextRequest, { params }: Params) {
   try {
     const { episode } = await params
-    const body = await request.json() as { date: string; news_items: BroadcastDetail["news_items"] }
+    const body = await request.json() as { episode_index?: string; date: string; news_items: BroadcastDetail["news_items"] }
 
     if (!body.date || !Array.isArray(body.news_items)) {
       return NextResponse.json({ error: "必須項目が不足しています" }, { status: 400 })
     }
 
-    await updateBroadcast(episode, body)
+    const newEpisodeIndex = body.episode_index && body.episode_index !== episode ? body.episode_index : undefined
+    await updateBroadcast(episode, { ...body, newEpisodeIndex })
     return NextResponse.json({ success: true })
   } catch (e) {
     const message = e instanceof Error ? e.message : "不明なエラー"

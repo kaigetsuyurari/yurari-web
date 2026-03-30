@@ -39,11 +39,12 @@ export default function BroadcastForm({ mode, initialData }: Props) {
     e.preventDefault()
     setStatus({ type: "loading", message: "" })
 
-    const url = mode === "create" ? "/api/broadcasts" : `/api/broadcasts/${episodeIndex}`
+    const originalEpisode = initialData?.episode_index ?? episodeIndex
+    const url = mode === "create" ? "/api/broadcasts" : `/api/broadcasts/${originalEpisode}`
     const method = mode === "create" ? "POST" : "PUT"
     const body = mode === "create"
       ? { episode_index: episodeIndex, date, news_items: newsItems }
-      : { date, news_items: newsItems }
+      : { episode_index: episodeIndex, date, news_items: newsItems }
 
     try {
       const res = await fetch(url, {
@@ -76,9 +77,8 @@ export default function BroadcastForm({ mode, initialData }: Props) {
             type="text"
             value={episodeIndex}
             onChange={e => setEpisodeIndex(e.target.value)}
-            disabled={mode === "edit"}
             required
-            className={`${inputClass} disabled:opacity-50`}
+            className={inputClass}
           />
         </label>
         <label className="flex flex-col gap-1">

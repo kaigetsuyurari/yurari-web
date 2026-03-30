@@ -49,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ja">
+    <html lang="ja" className="dark">
       <body className={`${zenKaku.variable} ${geistMono.variable} antialiased`}>
         <AppShell>{children}</AppShell>
       </body>

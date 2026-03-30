@@ -14,3 +14,15 @@ export type NewsDetail = {
   headline_index: string
   script: string
 }
+
+export type BroadcastWithCount = {
+  episode_index: string
+  date: string
+  news_item_count: number
+}
+
+export type BroadcastDetail = {
+  episode_index: string
+  date: string
+  news_items: { headline_index: string; headline_text: string; script: string }[]
+}

@@ -1,4 +1,4 @@
-import type { Broadcast, NewsItem, NewsDetail } from "@/types"
+import type { Broadcast, NewsItem, NewsDetail, BroadcastWithCount, BroadcastDetail } from "@/types"
 import { getCloudflareContext } from "@opennextjs/cloudflare"
 
 async function getDB() {
@@ -92,6 +92,97 @@ export async function getNewsDetails(episodeIndex?: string): Promise<NewsDetail[
     headline_index: String(r.headline_index),
     script: r.script,
   }))
+}
+
+export async function getBroadcastsWithCount(): Promise<BroadcastWithCount[]> {
+  const db = await getDB()
+  const { results } = await db
+    .prepare(
+      `SELECT b.episode_index, b.date, COUNT(ni.id) AS news_item_count
+       FROM broadcasts b
+       LEFT JOIN news_items ni ON ni.broadcast_id = b.id
+       GROUP BY b.id
+       ORDER BY b.episode_index DESC`
+    )
+    .all<{ episode_index: number; date: string; news_item_count: number }>()
+
+  return results.map(r => ({
+    episode_index: String(r.episode_index),
+    date: r.date,
+    news_item_count: r.news_item_count,
+  }))
+}
+
+export async function getBroadcastDetail(episodeIndex: string): Promise<BroadcastDetail | undefined> {
+  const db = await getDB()
+  const broadcast = await db
+    .prepare("SELECT id, episode_index, date FROM broadcasts WHERE episode_index = ?")
+    .bind(Number(episodeIndex))
+    .first<{ id: number; episode_index: number; date: string }>()
+
+  if (!broadcast) return undefined
+
+  const { results } = await db
+    .prepare(
+      `SELECT headline_index, headline_text, script
+       FROM news_items
+       WHERE broadcast_id = ?
+       ORDER BY headline_index`
+    )
+    .bind(broadcast.id)
+    .all<{ headline_index: number; headline_text: string; script: string }>()
+
+  return {
+    episode_index: String(broadcast.episode_index),
+    date: broadcast.date,
+    news_items: results.map(r => ({
+      headline_index: String(r.headline_index),
+      headline_text: r.headline_text,
+      script: r.script,
+    })),
+  }
+}
+
+export async function createBroadcast(data: BroadcastDetail): Promise<void> {
+  const db = await getDB()
+  const stmts = [
+    db.prepare("INSERT INTO broadcasts (episode_index, date) VALUES (?, ?)")
+      .bind(Number(data.episode_index), data.date),
+    ...data.news_items.map(item =>
+      db.prepare(
+        `INSERT INTO news_items (broadcast_id, headline_index, headline_text, script)
+         VALUES ((SELECT id FROM broadcasts WHERE episode_index = ?), ?, ?, ?)`
+      ).bind(Number(data.episode_index), Number(item.headline_index), item.headline_text, item.script)
+    ),
+  ]
+  await db.batch(stmts)
+}
+
+export async function updateBroadcast(episodeIndex: string, data: { date: string; news_items: BroadcastDetail["news_items"] }): Promise<void> {
+  const db = await getDB()
+  const stmts = [
+    db.prepare("UPDATE broadcasts SET date = ? WHERE episode_index = ?")
+      .bind(data.date, Number(episodeIndex)),
+    db.prepare("DELETE FROM news_items WHERE broadcast_id = (SELECT id FROM broadcasts WHERE episode_index = ?)")
+      .bind(Number(episodeIndex)),
+    ...data.news_items.map(item =>
+      db.prepare(
+        `INSERT INTO news_items (broadcast_id, headline_index, headline_text, script)
+         VALUES ((SELECT id FROM broadcasts WHERE episode_index = ?), ?, ?, ?)`
+      ).bind(Number(episodeIndex), Number(item.headline_index), item.headline_text, item.script)
+    ),
+  ]
+  await db.batch(stmts)
+}
+
+export async function deleteBroadcast(episodeIndex: string): Promise<void> {
+  const db = await getDB()
+  await db.batch([
+    db.prepare("DELETE FROM news_items WHERE broadcast_id = (SELECT id FROM broadcasts WHERE episode_index = ?)")
+      .bind(Number(episodeIndex)),
+    db.prepare("DELETE FROM broadcasts WHERE episode_index = ?")
+      .bind(Number(episodeIndex)),
+  ])
 }
 
 export async function getNewsDetail(episodeIndex: string, headlineIndex: string): Promise<NewsDetail | undefined> {

@@ -7,10 +7,13 @@ const X_URL = "https://x.com/kaigetsuyurari"
 export default function HomeView() {
   return (
     <div className="flex flex-col items-center">
+      <h1 className="mb-6 text-center text-2xl font-bold tracking-widest">
+        海月ゆらり | Yurari Kaigetsu
+      </h1>
       <div className="relative">
         <div className="absolute -inset-1 rounded-lg bg-neon/10 blur-xl" />
         <Image
-          src="/kaigetsuyurari.jpg"
+          src="/kaigetsuyurari.png"
           alt="Μέδουσα Ἰελλάρι"
           width={400}
           height={600}

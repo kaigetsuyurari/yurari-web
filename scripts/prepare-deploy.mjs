@@ -35,9 +35,7 @@ const routes = {
   exclude: [
     "/_next/static/*",
     "/favicon.ico",
-    "/icon.png",
-    "/apple-icon.png",
-    "/og-image.jpg",
+    "/*.png",
     "/*.svg",
     "/*.jpg",
     "/BUILD_ID",

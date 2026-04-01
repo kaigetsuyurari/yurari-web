@@ -8,23 +8,24 @@ export default async function AdminPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
-      <div className="mb-8 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h1 className="font-mono text-2xl font-medium tracking-widest text-neon glow-text">
-            BROADCASTS
-          </h1>
-          <Link
-            href="/admin/upload"
-            className="border border-border bg-card px-3 py-1 font-mono text-xs tracking-widest text-muted-foreground transition-all duration-300 border-glow-hover hover:text-neon"
-          >
-            CSV UPLOAD
-          </Link>
-        </div>
+      <div className="mb-4 flex gap-3">
         <Link
-          href="/admin/broadcasts/new"
+          href="/admin/tracks"
           className="border border-neon/40 bg-card px-6 py-2 font-mono text-sm tracking-widest text-neon transition-all duration-300 border-glow-hover hover:glow-sm"
         >
-          + NEW
+          TRACKS
+        </Link>
+      </div>
+
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="font-mono text-2xl font-medium tracking-widest text-neon glow-text">
+          BROADCASTS
+        </h1>
+        <Link
+          href="/admin/upload"
+          className="border border-neon/40 bg-card px-6 py-2 font-mono text-sm tracking-widest text-neon transition-all duration-300 border-glow-hover hover:glow-sm"
+        >
+          + CSV UPLOAD
         </Link>
       </div>
 

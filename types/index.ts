@@ -26,3 +26,11 @@ export type BroadcastDetail = {
   date: string
   news_items: { headline_index: string; headline_text: string; script: string }[]
 }
+
+export type Track = {
+  id: number
+  title: string
+  artist: string
+  url: string
+  created_at: string
+}

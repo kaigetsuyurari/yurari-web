@@ -1,4 +1,4 @@
-import type { Broadcast, NewsItem, NewsDetail, BroadcastWithCount, BroadcastDetail } from "@/types"
+import type { Broadcast, NewsItem, NewsDetail, BroadcastWithCount, BroadcastDetail, Track } from "@/types"
 import { getCloudflareContext } from "@opennextjs/cloudflare"
 
 async function getDB() {
@@ -208,4 +208,44 @@ export async function getNewsDetail(episodeIndex: string, headlineIndex: string)
     headline_index: String(result.headline_index),
     script: result.script,
   }
+}
+
+// --- Tracks ---
+
+export async function getTracks(): Promise<Track[]> {
+  const db = await getDB()
+  const { results } = await db
+    .prepare("SELECT id, title, artist, url, created_at FROM tracks ORDER BY created_at DESC")
+    .all<Track>()
+  return results
+}
+
+export async function getTrack(id: number): Promise<Track | undefined> {
+  const db = await getDB()
+  const result = await db
+    .prepare("SELECT id, title, artist, url, created_at FROM tracks WHERE id = ?")
+    .bind(id)
+    .first<Track>()
+  return result ?? undefined
+}
+
+export async function createTrack(data: { title: string; artist: string; url: string }): Promise<void> {
+  const db = await getDB()
+  await db
+    .prepare("INSERT INTO tracks (title, artist, url) VALUES (?, ?, ?)")
+    .bind(data.title, data.artist, data.url)
+    .run()
+}
+
+export async function updateTrack(id: number, data: { title: string; artist: string; url: string }): Promise<void> {
+  const db = await getDB()
+  await db
+    .prepare("UPDATE tracks SET title = ?, artist = ?, url = ? WHERE id = ?")
+    .bind(data.title, data.artist, data.url, id)
+    .run()
+}
+
+export async function deleteTrack(id: number): Promise<void> {
+  const db = await getDB()
+  await db.prepare("DELETE FROM tracks WHERE id = ?").bind(id).run()
 }

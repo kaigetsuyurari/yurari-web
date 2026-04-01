@@ -11,6 +11,7 @@ type Props = {
 const menuItems = [
   { label: "Οἶκος", href: "/" },
   { label: "Ἀρχεῖον", href: "/news" },
+  { label: "Μουσική", href: "/music" },
 ]
 
 export default function Drawer({ open, onClose }: Props) {

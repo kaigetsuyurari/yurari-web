@@ -22,14 +22,6 @@ export default function BroadcastForm({ mode, initialData }: Props) {
     message: "",
   })
 
-  function addItem() {
-    const nextIndex = String(Math.max(0, ...newsItems.map(n => Number(n.headline_index))) + 1)
-    setNewsItems([...newsItems, { headline_index: nextIndex, headline_text: "", script: "" }])
-  }
-
-  function removeItem(index: number) {
-    setNewsItems(newsItems.filter((_, i) => i !== index))
-  }
 
   function updateItem(index: number, field: keyof NewsItemInput, value: string) {
     setNewsItems(newsItems.map((item, i) => (i === index ? { ...item, [field]: value } : item)))
@@ -95,16 +87,7 @@ export default function BroadcastForm({ mode, initialData }: Props) {
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <span className={labelClass}>NEWS ITEMS</span>
-          <button
-            type="button"
-            onClick={addItem}
-            className="border border-neon/30 px-3 py-1 font-mono text-xs tracking-widest text-neon transition-colors hover:border-neon hover:glow-sm"
-          >
-            + ADD
-          </button>
-        </div>
+        <span className={labelClass}>NEWS ITEMS</span>
 
         {newsItems.map((item, i) => (
           <div key={i} className="border border-border/50 bg-card/50 p-4">
@@ -112,15 +95,6 @@ export default function BroadcastForm({ mode, initialData }: Props) {
               <span className="font-mono text-xs text-muted-foreground">
                 HEADLINE #{item.headline_index}
               </span>
-              {newsItems.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeItem(i)}
-                  className="font-mono text-xs text-red-400 hover:text-red-300"
-                >
-                  REMOVE
-                </button>
-              )}
             </div>
             <div className="flex flex-col gap-3">
               <div className="grid grid-cols-[80px_1fr] gap-3">

@@ -1,18 +1,61 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import type { Track } from "@/types"
+
+const CHUNK_SIZE = 50 * 1024 * 1024 // 50MB
 
 type Props =
   | { mode: "create"; initialData?: undefined }
   | { mode: "edit"; initialData: Track }
 
+async function uploadFile(file: File, onProgress: (pct: number) => void): Promise<string> {
+  const key = `${Date.now()}-${file.name}`
+
+  // 1. init
+  const initRes = await fetch("/api/tracks/upload", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "init", key }),
+  })
+  const { uploadId } = await initRes.json() as { uploadId: string }
+
+  // 2. upload parts
+  const parts: { partNumber: number; etag: string }[] = []
+  const totalChunks = Math.ceil(file.size / CHUNK_SIZE)
+
+  for (let i = 0; i < totalChunks; i++) {
+    const start = i * CHUNK_SIZE
+    const end = Math.min(start + CHUNK_SIZE, file.size)
+    const chunk = file.slice(start, end)
+    const buffer = await chunk.arrayBuffer()
+
+    const partRes = await fetch(
+      `/api/tracks/upload?key=${encodeURIComponent(key)}&uploadId=${encodeURIComponent(uploadId)}&partNumber=${i + 1}`,
+      { method: "PUT", body: buffer }
+    )
+    const part = await partRes.json() as { partNumber: number; etag: string }
+    parts.push(part)
+    onProgress(Math.round(((i + 1) / totalChunks) * 100))
+  }
+
+  // 3. complete
+  await fetch("/api/tracks/upload", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "complete", key, uploadId, parts }),
+  })
+
+  return key
+}
+
 export default function TrackForm({ mode, initialData }: Props) {
   const router = useRouter()
+  const fileRef = useRef<HTMLInputElement>(null)
   const [title, setTitle] = useState(initialData?.title ?? "")
   const [artist, setArtist] = useState(initialData?.artist ?? "")
-  const [url, setUrl] = useState(initialData?.url ?? "")
+  const [progress, setProgress] = useState<number | null>(null)
   const [status, setStatus] = useState<{ type: "idle" | "loading" | "error"; message: string }>({
     type: "idle",
     message: "",
@@ -20,27 +63,52 @@ export default function TrackForm({ mode, initialData }: Props) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    const file = fileRef.current?.files?.[0]
+
+    if (mode === "create" && !file) {
+      setStatus({ type: "error", message: "ファイルを選択してください" })
+      return
+    }
+
     setStatus({ type: "loading", message: "" })
 
-    const apiUrl = mode === "create" ? "/api/tracks" : `/api/tracks/${initialData!.id}`
-    const method = mode === "create" ? "POST" : "PUT"
-
     try {
-      const res = await fetch(apiUrl, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, artist, url }),
-      })
-      const data = await res.json() as { error?: string }
-
-      if (res.ok) {
-        router.push("/admin/tracks")
-        router.refresh()
-      } else {
-        setStatus({ type: "error", message: data.error ?? "エラーが発生しました" })
+      let newKey: string | undefined
+      if (file) {
+        setProgress(0)
+        newKey = await uploadFile(file, setProgress)
+        setProgress(null)
       }
+
+      if (mode === "create") {
+        const res = await fetch("/api/tracks", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, artist, key: newKey }),
+        })
+        const data = await res.json() as { error?: string }
+        if (!res.ok) {
+          setStatus({ type: "error", message: data.error ?? "エラーが発生しました" })
+          return
+        }
+      } else {
+        const res = await fetch(`/api/tracks/${initialData!.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, artist, newKey }),
+        })
+        const data = await res.json() as { error?: string }
+        if (!res.ok) {
+          setStatus({ type: "error", message: data.error ?? "エラーが発生しました" })
+          return
+        }
+      }
+
+      router.push("/admin/tracks")
+      router.refresh()
     } catch {
       setStatus({ type: "error", message: "通信エラーが発生しました" })
+      setProgress(null)
     }
   }
 
@@ -71,16 +139,30 @@ export default function TrackForm({ mode, initialData }: Props) {
       </label>
 
       <label className="flex flex-col gap-1">
-        <span className={labelClass}>AUDIO URL</span>
+        <span className={labelClass}>
+          {mode === "create" ? "AUDIO FILE" : "AUDIO FILE（変更する場合のみ）"}
+        </span>
         <input
-          type="url"
-          value={url}
-          onChange={e => setUrl(e.target.value)}
-          placeholder="https://..."
-          required
-          className={inputClass}
+          ref={fileRef}
+          type="file"
+          accept="audio/*"
+          className="text-sm text-foreground/60 file:mr-3 file:border file:border-border file:bg-card file:px-3 file:py-1.5 file:font-mono file:text-xs file:text-neon file:transition-colors hover:file:border-neon/60"
         />
       </label>
+
+      {progress !== null && (
+        <div className="flex flex-col gap-1">
+          <div className="h-1.5 w-full overflow-hidden bg-border">
+            <div
+              className="h-full bg-neon transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <span className="font-mono text-xs text-muted-foreground">
+            UPLOADING... {progress}%
+          </span>
+        </div>
+      )}
 
       <button
         type="submit"
@@ -88,7 +170,7 @@ export default function TrackForm({ mode, initialData }: Props) {
         className="border border-neon/40 bg-card px-8 py-3 font-mono text-sm tracking-widest text-neon transition-all duration-300 hover:border-neon hover:glow-sm disabled:opacity-50"
       >
         {status.type === "loading"
-          ? "SAVING..."
+          ? "UPLOADING..."
           : mode === "create" ? "CREATE" : "UPDATE"}
       </button>
 

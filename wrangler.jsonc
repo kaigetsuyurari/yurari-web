@@ -9,5 +9,11 @@
       "database_name": "yurari-db",
       "database_id": "48ab01f1-1860-4dc1-aa67-818946f7fe70"
     }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "yurari_music",
+      "bucket_name": "yurari-music"
+    }
   ]
 }

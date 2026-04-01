@@ -7,7 +7,7 @@ type Props = {
 export default function MusicList({ tracks }: Props) {
   if (tracks.length === 0) {
     return (
-      <p className="text-foreground/50 text-sm">まだ曲がありません。</p>
+      <p className="text-foreground/50 text-sm">Οὐδέπω μέλος ἐστίν.</p>
     )
   }
 
@@ -34,7 +34,7 @@ export default function MusicList({ tracks }: Props) {
             download
             className="inline-block text-xs text-neon/70 transition-colors hover:text-neon"
           >
-            ↓ ダウンロード
+            ↓ Κατέβασμα
           </a>
         </li>
       ))}
